@@ -15,7 +15,7 @@ while read -r line; do
     # * longer than 16, capture last 16 characters.
     #
     array=($line)
-    value="$(printf "%016s\n" ${array[2]:(${#array[2]} > 16 ? -16 : 0)})"
+    value="$(printf "%016x\n" ${array[2]:(${#array[2]} > 16 ? -16 : 0)})"
 
     # Write line to file and exit
     printf "#define DAC_TABLE_RVA 0x%s\n" "$value" > "$2"

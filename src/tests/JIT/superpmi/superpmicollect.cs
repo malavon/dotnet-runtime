@@ -34,6 +34,7 @@ namespace SuperPMICollection
         internal static bool IsWindows { get; private set; }
         internal static bool IsOSX { get; private set; }
         internal static bool IsLinux { get; private set; }
+        internal static bool IsFreeBSD { get; private set; }
 
         internal static string CoreRoot { get; private set; }
         internal static string StandaloneJitName { get; private set; }
@@ -66,6 +67,7 @@ namespace SuperPMICollection
             IsWindows = OperatingSystem.IsWindows();
             IsOSX     = OperatingSystem.IsMacOS();
             IsLinux   = OperatingSystem.IsLinux();
+            IsFreeBSD = OperatingSystem.IsFreeBSD();
 
             if (IsWindows)
             {
@@ -85,6 +87,13 @@ namespace SuperPMICollection
             {
                 StandaloneJitName = "libclrjit.dylib";
                 CollectorShimName = "libsuperpmi-shim-collector.dylib";
+                SuperPmiToolName  = "superpmi";
+                McsToolName       = "mcs";
+            }
+            else if (IsFreeBSD)
+            {
+                StandaloneJitName = "libclrjit.so";
+                CollectorShimName = "libsuperpmi-shim-collector.so";
                 SuperPmiToolName  = "superpmi";
                 McsToolName       = "mcs";
             }
