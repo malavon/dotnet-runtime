@@ -1223,7 +1223,7 @@ CorUnix::InternalSetThreadPriority(
     st = pthread_setschedparam(pTargetThread->GetPThreadSelf(), policy, &schedParam);
     if (st != 0)
     {
-// #if SET_SCHEDPARAM_NEEDS_PRIVS
+#if SET_SCHEDPARAM_NEEDS_PRIVS
         if (EPERM == st)
         {
             // UNIXTODO: Should log a warning to the event log
@@ -1231,7 +1231,7 @@ CorUnix::InternalSetThreadPriority(
             pTargetThread->m_iThreadPriority = iNewPriority;
             goto InternalSetThreadPriorityExit;
         }
-// #endif
+#endif
 
         ASSERT("Unable to set thread priority to %d (error %d)\n", (int)posix_priority, st);
         palError = ERROR_INTERNAL_ERROR;
@@ -1687,14 +1687,14 @@ CorUnix::InternalSetThreadDescription(
     {
         nameBuf[MAX_THREAD_NAME_SIZE] = '\0';
     }
-
+    
     #if defined(__linux__)
     error = pthread_setname_np(pTargetThread->GetPThreadSelf(), nameBuf);
     #endif
 
     #if defined(__APPLE__)
     // on macOS, pthread_setname_np only works for the calling thread.
-    if (PlatformGetCurrentThreadId() == pTargetThread->GetThreadId())
+    if (PlatformGetCurrentThreadId() == pTargetThread->GetThreadId()) 
     {
         error = pthread_setname_np(nameBuf);
     }
